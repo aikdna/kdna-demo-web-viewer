@@ -7,7 +7,7 @@ const scriptPath = fileURLToPath(import.meta.url)
 const appRoot = path.resolve(path.dirname(scriptPath), '..')
 const repoRoot = path.resolve(appRoot, '..')
 
-export const EXPECTED_CHANGELOG_TITLE = '## 0.1.0 - 2026-07-18'
+export const EXPECTED_CHANGELOG_TITLE = '## 0.1.1 - 2026-07-18'
 
 export function releaseContextErrors({
   eventAction,
