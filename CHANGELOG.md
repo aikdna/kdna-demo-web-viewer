@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 - 2026-07-18
+
+- Limit public-surface scanning to this repository's tracked and non-ignored
+  files, so release-only dependency checkouts cannot create false positives.
+- Keep machine-local path and KDNA-owned generation-label checks active for
+  both tracked files and non-ignored files that are not committed yet.
+- Add hostile regression coverage proving ignored dependency checkouts are
+  excluded while an equivalent leak in this repository is still rejected.
+
 ## 0.1.0 - 2026-07-18
 
 - Rebuild the reference viewer on KDNA Core 0.20.0, Web Client 0.2.2,

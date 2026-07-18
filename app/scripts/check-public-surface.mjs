@@ -3,6 +3,11 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import {
+  collectPublicSurfaceFiles,
+  publicTextBoundaryErrors,
+} from './public-surface-boundary.mjs'
+
 const scriptPath = fileURLToPath(import.meta.url)
 const appRoot = path.resolve(path.dirname(scriptPath), '..')
 const repoRoot = path.resolve(appRoot, '..')
@@ -36,7 +41,7 @@ function collectFiles(directory, files = []) {
 
 const manifest = JSON.parse(read('app/package.json'))
 check(manifest.name === 'kdna-demo-web-viewer', 'package name must identify the demo')
-check(manifest.version === '0.1.0', 'package version must match the release coordinate')
+check(manifest.version === '0.1.1', 'package version must match the release coordinate')
 check(manifest.private === true, 'demo application must not be npm-publishable')
 check(manifest.engines?.node === '>=20.9.0', 'Node.js floor must match Next.js and KDNA consumers')
 check(manifest.overrides?.postcss === '8.5.10', 'PostCSS security override must stay exact')
@@ -105,14 +110,7 @@ if (fs.existsSync(workflowRoot)) {
   }
 }
 
-const textExtensions = new Set(['.css', '.example', '.js', '.jsx', '.json', '.md', '.mjs', '.yml', '.yaml'])
-for (const absolute of collectFiles(repoRoot)) {
-  if (!textExtensions.has(path.extname(absolute))) continue
-  const relative = path.relative(repoRoot, absolute)
-  const source = fs.readFileSync(absolute, 'utf8')
-  check(!/\/Users\/|\/home\/runner\/work\/|[A-Za-z]:\\Users\\/.test(source), `${relative} exposes a machine-local path`)
-  check(!/\bKDNA[A-Za-z0-9_.-]*[-_.]?[vV][0-9]+\b/.test(source), `${relative} contains a KDNA-owned generation label`)
-}
+errors.push(...publicTextBoundaryErrors(collectPublicSurfaceFiles(repoRoot), repoRoot))
 
 const lockPath = path.join(appRoot, 'package-lock.json')
 if (!fs.existsSync(lockPath)) {

@@ -10,8 +10,8 @@ const valid = {
   eventAction: 'published',
   isDraft: 'false',
   isPrerelease: 'false',
-  tag: '0.1.0',
-  version: '0.1.0',
+  tag: '0.1.1',
+  version: '0.1.1',
   changelog: `# Changelog\n\n${EXPECTED_CHANGELOG_TITLE}\n\n- Verified.\n`,
   head: 'a'.repeat(40),
   tagCommit: 'a'.repeat(40),
@@ -45,12 +45,12 @@ for (const hostile of [
   },
   {
     name: 'a second heading for the same version',
-    change: { changelog: `# Changelog\n\n${EXPECTED_CHANGELOG_TITLE}\n\n## 0.1.0 - 2026-07-19\n` },
+    change: { changelog: `# Changelog\n\n${EXPECTED_CHANGELOG_TITLE}\n\n## 0.1.1 - 2026-07-19\n` },
     message: /exactly one CHANGELOG heading/,
   },
   {
     name: 'a mismatched release tag',
-    change: { tag: 'v0.1.0' },
+    change: { tag: 'v0.1.1' },
     message: /tag must exactly equal/,
   },
   {
