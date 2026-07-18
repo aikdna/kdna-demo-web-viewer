@@ -9,6 +9,8 @@ app/.kdna-storage/
 app/.kdna-test-storage/
 app/playwright-report/
 app/test-results/
+public-assets/
+public-core/
 
 # Environment
 .env

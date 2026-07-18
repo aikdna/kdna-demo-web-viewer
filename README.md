@@ -49,12 +49,19 @@ is serialized explicitly; it is never passed to React as a raw object child.
 ## Verify it
 
 The browser test launches the production Next.js server and loads the immutable
-`laozi-wuwei-0.1.1.kdna` reference asset through the real HTTP route.
+`laozi-wuwei-0.1.1.kdna` reference asset through the real HTTP route. It also
+loads Core commit `1e77e3e0d486c330fe9f9262b514ef24c859d469`'s public
+`fixtures/test_protected_entry.kdna` conformance vector, verifies the locked
+LoadPlan, enters that fixture's openly published test password, and verifies
+the returned Runtime Capsule. The fixture and password are public test vectors,
+not credentials or examples for protecting a real asset.
 
 ```bash
 npm test
 npm run build
-KDNA_DEMO_ASSET=/path/to/laozi-wuwei-0.1.1.kdna npm run test:e2e
+KDNA_DEMO_ASSET=/path/to/laozi-wuwei-0.1.1.kdna \
+KDNA_PROTECTED_DEMO_ASSET=/path/to/test_protected_entry.kdna \
+npm run test:e2e
 ```
 
 `npm run ci` runs source checks, a moderate-or-higher production dependency

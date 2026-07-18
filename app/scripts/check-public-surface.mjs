@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -50,13 +51,31 @@ for (const [name, version] of Object.entries(manifest.dependencies ?? {})) {
 
 const rootIgnore = read('.gitignore')
 const appIgnore = read('app/.gitignore')
+const license = read('LICENSE')
+const notice = read('NOTICE')
 check(!rootIgnore.includes('app/package-lock.json'), 'the root ignore file must not hide the lockfile')
 check(!appIgnore.split(/\r?\n/).includes('package-lock.json'), 'the app ignore file must not hide the lockfile')
+check(Buffer.byteLength(license) >= 11_000 && Buffer.byteLength(license) <= 12_000, 'LICENSE must contain the full Apache-2.0 text')
+check(createHash('sha256').update(license).digest('hex') === '699a9bdd9d3fb95f2146586a5fb1d7a6a6197a43422914f86869fed84c34222c', 'LICENSE must match the canonical KDNA Apache-2.0 text')
+for (const section of [
+  'TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION',
+  '1. Definitions.',
+  '2. Grant of Copyright License.',
+  '3. Grant of Patent License.',
+  '4. Redistribution.',
+  '9. Accepting Warranty or Additional Liability.',
+  'END OF TERMS AND CONDITIONS',
+]) {
+  check(license.includes(section), `LICENSE is missing: ${section}`)
+}
+check(notice.includes('Copyright 2026 KDNA Authors'), 'project copyright declaration belongs in NOTICE')
 
 const page = read('app/app/page.jsx')
 const route = read('app/app/api/kdna/[...route]/route.js')
 const nextConfig = read('app/next.config.mjs')
 const readme = read('README.md')
+const ciWorkflow = read('.github/workflows/ci.yml')
+const releaseWorkflow = read('.github/workflows/release.yml')
 check(page.includes('JSON.stringify(value, null, 2)'), 'Runtime objects must be serialized explicitly')
 check(!/\{\s*(?:unlock|content|inspect)\s*\|\|/.test(page), 'raw KDNA objects must not be rendered as React children')
 check(!page.includes('console.'), 'browser flow must not log public or protected response objects')
@@ -65,6 +84,12 @@ check(nextConfig.includes("'@aikdna/kdna-core'"), 'KDNA Core must stay on the se
 check(nextConfig.includes("'@aikdna/kdna-web-server'"), 'KDNA Web Server must stay on the server package boundary')
 check(readme.includes('/releases/download/0.1.1/laozi-wuwei-0.1.1.kdna'), 'README must use the current public reference asset')
 check(!readme.includes('agent-project-context-v0.1.2'), 'removed historical asset URL must not return')
+for (const workflow of [ciWorkflow, releaseWorkflow]) {
+  check(workflow.includes('1e77e3e0d486c330fe9f9262b514ef24c859d469'), 'browser workflows must pin the exact Core fixture commit')
+  check(workflow.includes('fixtures/test_protected_entry.kdna'), 'browser workflows must install the protected Core fixture')
+  check(workflow.includes('KDNA_PROTECTED_DEMO_ASSET'), 'browser workflows must execute the protected fixture')
+}
+check(releaseWorkflow.includes('refs/heads/main:refs/remotes/origin/main'), 'release workflow must fetch authoritative main exactly')
 
 const workflowRoot = path.join(repoRoot, '.github', 'workflows')
 check(fs.existsSync(workflowRoot), 'workflow directory is required')

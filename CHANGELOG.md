@@ -16,3 +16,7 @@
   dependency audit does not retain the earlier CSS serialization advisory.
 - Document the browser/server credential and storage boundary without implying
   Host delivery, model consumption, content correctness, or production safety.
+- Verify the public Core 0.20.0 password conformance fixture through browser
+  inspect, locked LoadPlan, password unlock, and Runtime Capsule loading.
+- Require the full canonical Apache-2.0 license and bind stable releases to a
+  unique first CHANGELOG heading on authoritative `origin/main` history.
