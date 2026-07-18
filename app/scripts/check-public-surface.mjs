@@ -75,6 +75,7 @@ const route = read('app/app/api/kdna/[...route]/route.js')
 const nextConfig = read('app/next.config.mjs')
 const readme = read('README.md')
 const ciWorkflow = read('.github/workflows/ci.yml')
+const dcoWorkflow = read('.github/workflows/dco.yml')
 const releaseWorkflow = read('.github/workflows/release.yml')
 check(page.includes('JSON.stringify(value, null, 2)'), 'Runtime objects must be serialized explicitly')
 check(!/\{\s*(?:unlock|content|inspect)\s*\|\|/.test(page), 'raw KDNA objects must not be rendered as React children')
@@ -90,6 +91,8 @@ for (const workflow of [ciWorkflow, releaseWorkflow]) {
   check(workflow.includes('KDNA_PROTECTED_DEMO_ASSET'), 'browser workflows must execute the protected fixture')
 }
 check(releaseWorkflow.includes('refs/heads/main:refs/remotes/origin/main'), 'release workflow must fetch authoritative main exactly')
+check(dcoWorkflow.includes('name: DCO'), 'pull requests must expose the required DCO context')
+check(dcoWorkflow.includes('node app/scripts/check-dco.mjs'), 'DCO workflow must run the repository-owned verifier')
 
 const workflowRoot = path.join(repoRoot, '.github', 'workflows')
 check(fs.existsSync(workflowRoot), 'workflow directory is required')

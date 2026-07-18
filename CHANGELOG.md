@@ -20,3 +20,5 @@
   inspect, locked LoadPlan, password unlock, and Runtime Capsule loading.
 - Require the full canonical Apache-2.0 license and bind stable releases to a
   unique first CHANGELOG heading on authoritative `origin/main` history.
+- Enforce an author-matching DCO sign-off for every pull request commit without
+  depending on repository-external app installation state.
