@@ -1,0 +1,6 @@
+KDNA Web Asset Viewer
+Copyright 2026 KDNA Authors
+
+This product includes software developed by the KDNA project and uses Next.js,
+React, Playwright, and the published KDNA Node.js toolchain. Their respective
+licenses apply to those dependencies.

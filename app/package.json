@@ -1,19 +1,36 @@
 {
-  "name": "app",
+  "name": "kdna-demo-web-viewer",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node scripts/smoke.mjs"
+    "test": "node scripts/smoke.mjs && node --test tests/*.test.mjs",
+    "test:e2e": "playwright test",
+    "audit:production": "npm audit --omit=dev --audit-level=moderate",
+    "public:check": "node scripts/check-public-surface.mjs",
+    "public:check:source": "node scripts/check-public-surface.mjs --allow-missing-lock",
+    "release:context": "node scripts/verify-release-context.mjs",
+    "ci": "npm run test && npm run public:check && npm run audit:production && npm run build && npm run test:e2e"
   },
   "dependencies": {
-    "@aikdna/kdna-core": "^0.15.10",
-    "@aikdna/kdna-react": "^0.1.0",
-    "@aikdna/kdna-web-server": "^0.1.0",
-    "next": "^16.2.10",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "@aikdna/kdna-core": "0.20.0",
+    "@aikdna/kdna-react": "0.3.0",
+    "@aikdna/kdna-web-client": "0.2.2",
+    "@aikdna/kdna-web-server": "0.3.0",
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
   }
 }

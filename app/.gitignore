@@ -1,3 +1,7 @@
 node_modules
 .next
 .env.local
+.kdna-storage
+.kdna-test-storage
+playwright-report
+test-results

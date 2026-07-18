@@ -5,6 +5,10 @@ node_modules/
 # Next.js build output
 app/.next/
 app/out/
+app/.kdna-storage/
+app/.kdna-test-storage/
+app/playwright-report/
+app/test-results/
 
 # Environment
 .env
@@ -18,4 +22,3 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
-app/package-lock.json

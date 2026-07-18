@@ -1,63 +1,99 @@
-# KDNA Demo: Web Asset Viewer
+# KDNA Web Asset Viewer
 
-Official demo showing how to build a browser-based KDNA asset viewer using `@aikdna/kdna-react` and `@aikdna/kdna-web-server`.
+The official reference demo for integrating a `.kdna` judgment asset into a
+browser application. It uses the KDNA React components in the browser and the
+KDNA Web Server adapter in a Next.js Node.js route.
 
-## What this demo proves
+The demo exercises the compatible consumption path:
 
-A developer who has never seen KDNA can:
+```text
+upload → inspect → LoadPlan → load and project → Runtime Capsule context
+```
 
-1. Clone this repo
-2. Run `npm install && npm run dev`
-3. Open `http://localhost:3000`
-4. Drop a `.kdna` file into the browser
-5. See the asset's metadata, LoadPlan, and judgment context — all rendered in React
+It does not claim that a model used the loaded judgment, that the asset's
+content is correct, or that this unauthenticated local demo is production-ready.
 
-No CLI required. No backend beyond the Next.js API route.
+## Exact stack
 
-## Quick start
+| Package | Version | Responsibility |
+|---|---:|---|
+| `@aikdna/kdna-core` | `0.20.0` | Format and Runtime contracts |
+| `@aikdna/kdna-web-client` | `0.2.2` | Browser HTTP boundary |
+| `@aikdna/kdna-web-server` | `0.3.0` | Node.js inspect, plan, and load routes |
+| `@aikdna/kdna-react` | `0.3.0` | Browser components and hooks |
+
+The application requires Node.js 20.9 or newer because of its Next.js and KDNA
+consumer dependencies.
+
+## Run it
 
 ```bash
 git clone https://github.com/aikdna/kdna-demo-web-viewer.git
 cd kdna-demo-web-viewer/app
-npm install
+npm ci
 npm run dev
 ```
 
-Open http://localhost:3000 in your browser.
+Open <http://localhost:3000>.
 
-## Get a .kdna file to try
+Download the current Laozi-inspired public reference asset:
 
 ```bash
-curl -LO https://github.com/aikdna/kdna-assets/releases/download/agent-project-context-v0.1.2/agent-project-context-v0.1.2.kdna
+curl -LO https://github.com/aikdna/kdna-assets/releases/download/0.1.1/laozi-wuwei-0.1.1.kdna
 ```
 
-Drag the downloaded `.kdna` file into the browser UI.
+Drop the file into the page. The UI renders public inspect metadata, the
+LoadPlan state, and the loaded Runtime Capsule context. Structured Runtime data
+is serialized explicitly; it is never passed to React as a raw object child.
 
-## What's inside
+## Verify it
 
-- `app/` — Next.js app (scaffolded with `create-kdna-web-app`)
-  - `app/page.jsx` — React UI with `KDNAFileDropzone`, `KDNAAssetInspector`, `KDNALoadPlanGate`
-  - `app/api/kdna/[...route]/route.js` — Server API using `@aikdna/kdna-web-server`
-  - `app/layout.jsx` — Root layout
-- Uses `@aikdna/kdna-react` for browser components
-- Uses `@aikdna/kdna-web-server` for server-side validation and load
+The browser test launches the production Next.js server and loads the immutable
+`laozi-wuwei-0.1.1.kdna` reference asset through the real HTTP route.
 
-## Why KDNA?
+```bash
+npm test
+npm run build
+KDNA_DEMO_ASSET=/path/to/laozi-wuwei-0.1.1.kdna npm run test:e2e
+```
 
-Without KDNA, giving an AI agent domain judgment means either:
-- Pasting a long prompt every time (fragile, unverifiable)
-- Hoping the agent "knows" your domain (uncontrollable)
+`npm run ci` runs source checks, a moderate-or-higher production dependency
+audit, the production build, and the browser test.
 
-KDNA packages judgment into a `.kdna` file — inspectable, verifiable, and loadable with one command. This demo shows the browser side of that equation.
+## Security boundary
 
-## Related
+- Uploaded files are held in server-side temporary storage; the configured
+  storage directory must never be publicly served.
+- Passwords and license keys are request-scoped. They must be sent over HTTPS
+  outside loopback development and must not be logged or persisted.
+- The browser receives public inspect fields, LoadPlan state, and authorized
+  Runtime Capsule context from the server. The server does not return protected
+  payload bytes, passwords, license keys, or server-side key material. The
+  browser necessarily holds the local file bytes selected for upload.
+- This local demo intentionally omits authentication, application authorization,
+  rate limiting, durable shared storage, and audit logging. Add those controls
+  before adapting it for a production deployment.
+- The verified server target is the Next.js Node.js runtime, not an Edge runtime.
 
-- [KDNA CLI](https://github.com/aikdna/kdna-cli) — command-line runtime
-- [KDNA React](https://github.com/aikdna/kdna-react) — React components used in this demo
-- [KDNA Web Server](https://github.com/aikdna/kdna-web-server) — server adapters used in this demo
-- [Create KDNA Web App](https://github.com/aikdna/create-kdna-web-app) — scaffolder that generated this app
-- [KDNA Assets](https://github.com/aikdna/kdna-assets) — official asset catalog
+See [SECURITY.md](./SECURITY.md) for reporting and deployment guidance.
+
+## Repository layout
+
+- `app/app/page.jsx` — browser flow and explicit structured-data rendering
+- `app/app/api/kdna/[...route]/route.js` — Node.js KDNA server adapter
+- `app/next.config.mjs` — server-only package boundary for Core Schema loading
+- `app/tests/e2e/viewer.spec.mjs` — real browser and HTTP integration
+- `.github/workflows/` — immutable CI, CodeQL, and release verification
+
+## Related projects
+
+- [KDNA Core](https://github.com/aikdna/kdna)
+- [KDNA React](https://github.com/aikdna/kdna-react)
+- [KDNA Web Client](https://github.com/aikdna/kdna-web-client)
+- [KDNA Web Server](https://github.com/aikdna/kdna-web-server)
+- [Create KDNA Web App](https://github.com/aikdna/create-kdna-web-app)
+- [KDNA Assets](https://github.com/aikdna/kdna-assets)
 
 ## License
 
-Apache 2.0
+Apache-2.0
