@@ -45,10 +45,14 @@ test('the license is the canonical complete Apache-2.0 text', () => {
   assert.match(notice, /Copyright 2026 KDNA Authors/)
 })
 
-test('CI retains protected browser coverage while the frozen demo has no release workflow', () => {
-  const ci = fs.readFileSync(path.join(repoRoot, '.github', 'workflows', 'ci.yml'), 'utf8')
-  assert.match(ci, /1e77e3e0d486c330fe9f9262b514ef24c859d469/)
-  assert.match(ci, /fixtures\/test_protected_entry\.kdna/)
-  assert.match(ci, /KDNA_PROTECTED_DEMO_ASSET/)
-  assert.equal(fs.existsSync(path.join(repoRoot, '.github', 'workflows', 'release.yml')), false)
+test('CI and release pin both public and protected browser assets', () => {
+  for (const workflow of ['ci.yml', 'release.yml']) {
+    const source = fs.readFileSync(path.join(repoRoot, '.github', 'workflows', workflow), 'utf8')
+    assert.match(source, /1e77e3e0d486c330fe9f9262b514ef24c859d469/)
+    assert.match(source, /fixtures\/test_protected_entry\.kdna/)
+    assert.match(source, /KDNA_PROTECTED_DEMO_ASSET/)
+  }
+
+  const release = fs.readFileSync(path.join(repoRoot, '.github', 'workflows', 'release.yml'), 'utf8')
+  assert.match(release, /refs\/heads\/main:refs\/remotes\/origin\/main/)
 })
