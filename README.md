@@ -1,5 +1,9 @@
 # KDNA Web Asset Viewer
 
+> **Status:** Experimental source-only reference application. It demonstrates
+> an explicit file-upload technical chain, not a complete accepted Host
+> experience or an AIKDNA-hosted service.
+
 The official reference demo for integrating a `.kdna` judgment asset into a
 browser application. It uses the KDNA React components in the browser and the
 KDNA Web Server adapter in a Next.js Node.js route.
@@ -12,6 +16,8 @@ upload → inspect → LoadPlan → load and project → Runtime Capsule context
 
 It does not claim that a model used the loaded judgment, that the asset's
 content is correct, or that this unauthenticated local demo is production-ready.
+It also does not establish persistent attachment, active-state,
+disable/switch/rollback, or cross-session policy behavior.
 
 ## Exact stack
 
