@@ -23,7 +23,7 @@
     "@aikdna/kdna-react": "0.3.0",
     "@aikdna/kdna-web-client": "0.2.2",
     "@aikdna/kdna-web-server": "0.3.0",
-    "next": "16.2.10",
+    "next": "16.2.12",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
@@ -31,6 +31,7 @@
     "@playwright/test": "1.61.1"
   },
   "overrides": {
-    "postcss": "8.5.10"
+    "postcss": "8.5.23",
+    "sharp": "0.35.3"
   }
 }
