@@ -44,7 +44,9 @@ check(manifest.name === 'kdna-demo-web-viewer', 'package name must identify the 
 check(manifest.version === '0.1.1', 'package version must match the release coordinate')
 check(manifest.private === true, 'demo application must not be npm-publishable')
 check(manifest.engines?.node === '>=20.9.0', 'Node.js floor must match Next.js and KDNA consumers')
+check(manifest.dependencies?.next === '16.2.12', 'next must be exactly 16.2.12')
 check(manifest.overrides?.postcss === '8.5.23', 'PostCSS security override must stay exact')
+check(manifest.overrides?.sharp === '0.35.3', 'sharp security override must stay exact')
 
 for (const [name, version] of Object.entries(expectedDependencies)) {
   check(manifest.dependencies?.[name] === version, `${name} must be exactly ${version}`)
