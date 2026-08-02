@@ -19,7 +19,7 @@
     "ci": "npm run test && npm run public:check && npm run audit:production && npm run build && npm run test:e2e"
   },
   "dependencies": {
-    "@aikdna/kdna-core": "0.20.0",
+    "@aikdna/kdna-core": "0.21.0",
     "@aikdna/kdna-react": "0.3.0",
     "@aikdna/kdna-web-client": "0.2.2",
     "@aikdna/kdna-web-server": "0.3.0",
