@@ -21,7 +21,7 @@ Before adapting it for a public service:
 - keep encrypted payloads, passwords, license keys, and key material out of
   browser responses and logs;
 - run the KDNA route in the Next.js Node.js runtime;
-- review the security model published by `@aikdna/kdna-web-server@0.3.0`.
+- review the security model published by `@aikdna/kdna-web-server@0.3.1`.
 
 The application keeps a temporary exact PostCSS override in `package.json`
 because the pinned Next.js release otherwise resolves a version affected by a

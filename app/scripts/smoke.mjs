@@ -10,7 +10,7 @@ import { createNextHandlers } from '@aikdna/kdna-web-server/nextjs'
 const packagePath = fileURLToPath(new URL('../package.json', import.meta.url))
 const manifest = JSON.parse(await readFile(packagePath, 'utf8'))
 
-assert.equal(KDNA_LOADER_VERSION, '0.20.0')
+assert.equal(KDNA_LOADER_VERSION, '0.21.0')
 assert.equal(typeof KDNALoadPlanManager, 'function')
 assert.equal(typeof createNextHandlers, 'function')
 assert.equal(typeof KDNAFileDropzone, 'function')
@@ -24,9 +24,9 @@ assert.deepEqual(
     react: manifest.dependencies['@aikdna/kdna-react'],
   },
   {
-    core: '0.20.0',
+    core: '0.21.0',
     client: '0.2.2',
-    server: '0.3.0',
+    server: '0.3.1',
     react: '0.3.0',
   },
 )

@@ -15,10 +15,10 @@ const allowMissingLock = process.argv.includes('--allow-missing-lock')
 const errors = []
 
 const expectedDependencies = {
-  '@aikdna/kdna-core': '0.20.0',
+  '@aikdna/kdna-core': '0.21.0',
   '@aikdna/kdna-react': '0.3.0',
   '@aikdna/kdna-web-client': '0.2.2',
-  '@aikdna/kdna-web-server': '0.3.0',
+  '@aikdna/kdna-web-server': '0.3.1',
 }
 
 function check(condition, message) {
