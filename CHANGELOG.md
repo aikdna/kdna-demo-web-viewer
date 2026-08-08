@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2026-08-08
+
+- Upgrade to the published 0.21.0 consumer chain: Core 0.21.0, Web Client
+  0.3.0, Web Server 0.3.1, React 0.4.0 (0.21.0 Runtime Capsules validate).
+
 ## 0.1.1 - 2026-07-18
 
 - Limit public-surface scanning to this repository's tracked and non-ignored
