@@ -15,10 +15,10 @@ const allowMissingLock = process.argv.includes('--allow-missing-lock')
 const errors = []
 
 const expectedDependencies = {
-  '@aikdna/kdna-core': '0.20.0',
-  '@aikdna/kdna-react': '0.3.0',
-  '@aikdna/kdna-web-client': '0.2.2',
-  '@aikdna/kdna-web-server': '0.3.0',
+  '@aikdna/kdna-core': '0.21.0',
+  '@aikdna/kdna-react': '0.4.0',
+  '@aikdna/kdna-web-client': '0.3.0',
+  '@aikdna/kdna-web-server': '0.3.1',
 }
 
 function check(condition, message) {
@@ -41,7 +41,7 @@ function collectFiles(directory, files = []) {
 
 const manifest = JSON.parse(read('app/package.json'))
 check(manifest.name === 'kdna-demo-web-viewer', 'package name must identify the demo')
-check(manifest.version === '0.1.1', 'package version must match the release coordinate')
+check(manifest.version === '0.1.2', 'package version must match the release coordinate')
 check(manifest.private === true, 'demo application must not be npm-publishable')
 check(manifest.engines?.node === '>=20.9.0', 'Node.js floor must match Next.js and KDNA consumers')
 check(manifest.dependencies?.next === '16.2.12', 'next must be exactly 16.2.12')
