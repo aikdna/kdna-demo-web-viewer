@@ -23,10 +23,10 @@ disable/switch/rollback, or cross-session policy behavior.
 
 | Package | Version | Responsibility |
 |---|---:|---|
-| `@aikdna/kdna-core` | `0.20.0` | Format and Runtime contracts |
-| `@aikdna/kdna-web-client` | `0.2.2` | Browser HTTP boundary |
-| `@aikdna/kdna-web-server` | `0.3.0` | Node.js inspect, plan, and load routes |
-| `@aikdna/kdna-react` | `0.3.0` | Browser components and hooks |
+| `@aikdna/kdna-core` | `0.21.0` | Format and Runtime contracts |
+| `@aikdna/kdna-web-client` | `0.3.0` | Browser HTTP boundary |
+| `@aikdna/kdna-web-server` | `0.3.1` | Node.js inspect, plan, and load routes |
+| `@aikdna/kdna-react` | `0.4.0` | Browser components and hooks |
 
 The application requires Node.js 20.9 or newer because of its Next.js and KDNA
 consumer dependencies.
