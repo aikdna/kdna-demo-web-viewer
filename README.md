@@ -117,6 +117,14 @@ demonstrated by the remote server's
 [licensed projection walkthrough](https://github.com/aikdna/kdna-remote-server/blob/main/docs/LICENSED_PROJECTION_WALKTHROUGH.md).
 Both paths can point at the same self-hosted activation server for entitlement.
 
+
+## Official packages
+
+Official KDNA packages are published under the `@aikdna` npm scope and the
+`aikdna` name on PyPI. The unscoped npm package `kdna` is not affiliated with
+the KDNA project. Install only from the official coordinates shown in this
+README.
+
 ## License
 
 Apache-2.0
