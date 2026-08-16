@@ -106,6 +106,16 @@ See [SECURITY.md](./SECURITY.md) for reporting and deployment guidance.
 - [KDNA Web Server](https://github.com/aikdna/kdna-web-server)
 - [Create KDNA Web App](https://github.com/aikdna/create-kdna-web-app)
 - [KDNA Assets](https://github.com/aikdna/kdna-assets)
+- [KDNA Activation Server](https://github.com/aikdna/kdna-activation-server)
+- [KDNA Remote Server](https://github.com/aikdna/kdna-remote-server)
+
+This demo is the browser consumer for the **local full-load** contract
+(upload → LoadPlan → authorized Runtime Capsule). The complementary **remote
+projection** contract — where the asset stays on the deployer's server and only
+a task-scoped projection crosses the network, never the full payload — is
+demonstrated by the remote server's
+[licensed projection walkthrough](https://github.com/aikdna/kdna-remote-server/blob/main/docs/LICENSED_PROJECTION_WALKTHROUGH.md).
+Both paths can point at the same self-hosted activation server for entitlement.
 
 ## License
 
