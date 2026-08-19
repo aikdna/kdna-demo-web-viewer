@@ -28,7 +28,7 @@ disable/switch/rollback, or cross-session policy behavior.
 | `@aikdna/kdna-web-server` | `0.3.1` | Node.js inspect, plan, and load routes |
 | `@aikdna/kdna-react` | `0.4.0` | Browser components and hooks |
 
-The application requires Node.js 20.9 or newer because of its Next.js and KDNA
+The application requires Node.js 22 or newer because of its Next.js and KDNA
 consumer dependencies.
 
 ## Run it
