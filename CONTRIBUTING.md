@@ -5,7 +5,7 @@ keep the browser/server boundary visible and reproducible.
 
 ## Requirements
 
-- Node.js 20.9 or newer
+- Node.js 22 or newer
 - The public `laozi-wuwei-0.1.1.kdna` asset for browser verification
 - Core commit `1e77e3e`'s public `test_protected_entry.kdna` conformance fixture
 
