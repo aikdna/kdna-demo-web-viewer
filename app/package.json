@@ -23,7 +23,7 @@
     "@aikdna/kdna-react": "0.4.0",
     "@aikdna/kdna-web-client": "0.3.0",
     "@aikdna/kdna-web-server": "0.3.1",
-    "next": "16.2.12",
+    "next": "16.3.3",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
