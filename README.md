@@ -1,130 +1,60 @@
-# KDNA Web Asset Viewer
+# KDNA basic web reference demo
 
-> **Status:** Experimental source-only reference application. It demonstrates
-> an explicit file-upload technical chain, not a complete accepted Host
-> experience or an AIKDNA-hosted service.
+A private Next.js application for one explicit public Read at a time. Select a valid KDNA file locally, enter its judgment ID, and choose **Read**. The UI uses the public `useKDNARead`, `KDNAFileInput`, `KDNAReadStatus`, and `KDNAReadView` APIs. Selection alone sends no HTTP request.
 
-The official reference demo for integrating a `.kdna` judgment asset into a
-browser application. It uses the KDNA React components in the browser and the
-KDNA Web Server adapter in a Next.js Node.js route.
+**Cross-request expansion is unsupported (NOT_PROVEN).** No retained Host session or persistent uploaded-file store is created. Cancel interrupts the current request; Release clears the selection and visible result. Selecting another file invalidates earlier work. Content, diagnostics and proof limits come from the public remote ViewModel; they grant no local authorization or action capability.
 
-The demo exercises the compatible consumption path:
+## Run locally
 
-```text
-upload → inspect → LoadPlan → load and project → Runtime Capsule context
-```
+Use Node.js 22 or newer. Framework versions remain Next 16.2.12, React 19.2.7 and ReactDOM 19.2.7. The app is private and has no publication workflow in this delivery.
 
-It does not claim that a model used the loaded judgment, that the asset's
-content is correct, or that this unauthenticated local demo is production-ready.
-It also does not establish persistent attachment, active-state,
-disable/switch/rollback, or cross-session policy behavior.
+From `app/`:
 
-## Exact stack
-
-| Package | Version | Responsibility |
-|---|---:|---|
-| `@aikdna/kdna-core` | `0.21.0` | Format and Runtime contracts |
-| `@aikdna/kdna-web-client` | `0.3.0` | Browser HTTP boundary |
-| `@aikdna/kdna-web-server` | `0.3.1` | Node.js inspect, plan, and load routes |
-| `@aikdna/kdna-react` | `0.4.0` | Browser components and hooks |
-
-The application requires Node.js 22 or newer because of its Next.js and KDNA
-consumer dependencies.
-
-## Run it
-
-```bash
-git clone https://github.com/aikdna/kdna-demo-web-viewer.git
-cd kdna-demo-web-viewer/app
-npm ci
-npm run dev
-```
-
-Open <http://localhost:3000>.
-
-Download the current Laozi-inspired public reference asset:
-
-```bash
-curl -LO https://github.com/aikdna/kdna-assets/releases/download/0.1.1/laozi-wuwei-0.1.1.kdna
-```
-
-Drop the file into the page. The UI renders public inspect metadata, the
-LoadPlan state, and the loaded Runtime Capsule context. Structured Runtime data
-is serialized explicitly; it is never passed to React as a raw object child.
-
-## Verify it
-
-The browser test launches the production Next.js server and loads the immutable
-`laozi-wuwei-0.1.1.kdna` reference asset through the real HTTP route. It also
-loads Core commit `1e77e3e0d486c330fe9f9262b514ef24c859d469`'s public
-`fixtures/test_protected_entry.kdna` conformance vector, verifies the locked
-LoadPlan, enters that fixture's openly published test password, and verifies
-the returned Runtime Capsule. The fixture and password are public test vectors,
-not credentials or examples for protecting a real asset.
-
-```bash
-npm test
+```sh
+npm ci --ignore-scripts --no-audit --no-fund
+npm --prefix host ci --ignore-scripts --no-audit --no-fund
 npm run build
-KDNA_DEMO_ASSET=/path/to/laozi-wuwei-0.1.1.kdna \
-KDNA_PROTECTED_DEMO_ASSET=/path/to/test_protected_entry.kdna \
+npm start -- --port 3210 --host-port 3211
+```
+
+Open [the local demo](http://127.0.0.1:3210). Both processes bind only to 127.0.0.1. Choose unused ports. Ctrl+C stops the owned Next and basic Host processes; a failed child also stops its companion. `npm run dev` uses the same local process owner with Next development mode.
+
+### Offline install boundary
+
+This repository vendors the KDNA packages only. The Next/React framework graph is
+not vendored, so `npm ci --offline` with an empty npm cache fails in `app/` at the
+first missing package (`tslib`); that directory resolves 75 registry packages and
+an installed tree is about 219 MiB. Use registry access or a prepared npm cache
+for `app/`. The loopback host in `app/host/` is fully vendored and installs with
+an empty cache (`npm ci --offline`, 12 packages). Not redistributing the framework
+tarballs is a deliberate size choice, not a defect.
+
+The seven KDNA packages are immutable relative `vendor/` inputs. Other dependencies are fixed in the two lockfiles. Install only from those locks, with install hooks disabled. Offline installation needs the matching registry tarballs already in a dedicated npm cache; the repository does not silently fetch or replace KDNA RCs.
+
+## Test input and checks
+
+```sh
+npm run fixtures -- .demo-fixtures
+npm test
 npm run test:e2e
 ```
 
-`npm run ci` runs source checks, a moderate-or-higher production dependency
-audit, the production build, and the browser test.
+The fixture command generates local synthetic **asset version 1.1.0** files and validates the positive cases with public Core. Their container/payload/Read tuple remains the accepted public 0.2/0.1 contract; 1.1.0 is the test asset version, not a new protocol. Choose `basic-1.1.kdna` and the default `judgment:demo`. Replacement, long text, invalid and oversized fixtures support the local checks. These are test inputs, not formal KDNA assets or a conversion of older examples.
 
-## Security boundary
+Other files must be accepted by the current public Core graph, fit the 10 MiB input bound, and identify a judgment the caller explicitly selects. No legacy password, activation, upload/inspect/plan/load or execution flow is provided. Errors expose bounded public or application codes. The page never renders raw container payloads.
 
-- Uploaded files are held in server-side temporary storage; the configured
-  storage directory must never be publicly served.
-- Passwords and license keys are request-scoped. They must be sent over HTTPS
-  outside loopback development and must not be logged or persisted.
-- The browser receives public inspect fields, LoadPlan state, and authorized
-  Runtime Capsule context from the server. The server does not return protected
-  payload bytes, passwords, license keys, or server-side key material. The
-  browser necessarily holds the local file bytes selected for upload.
-- This local demo intentionally omits authentication, application authorization,
-  rate limiting, durable shared storage, and audit logging. Add those controls
-  before adapting it for a production deployment.
-- The verified server target is the Next.js Node.js runtime, not an Edge runtime.
+The browser checks use installed Chrome and Playwright 1.61.1 WebKit. Set `PLAYWRIGHT_BROWSERS_PATH` to an existing compatible browser installation when needed. They start production Next/Host processes on temporary loopback ports and close them after tests. No browser download is performed by these scripts.
 
-See [SECURITY.md](./SECURITY.md) for reporting and deployment guidance.
+`npm test` runs the new basic public-boundary smoke and direct tests. Production build and actual browser checks are separate. Historical Git-based DCO/release/public collector tests, old CI/release asset fixtures, and online npm audit were **NOT_RUN** for this scoped delivery. Their frozen files and the inherited layout metadata do not describe new acceptance or release authorization. This is not a claim that the legacy `ci` script is green.
 
-## Repository layout
+## Two exact dependency graphs
 
-- `app/app/page.jsx` — browser flow and explicit structured-data rendering
-- `app/app/api/kdna/[...route]/route.js` — Node.js KDNA server adapter
-- `app/next.config.mjs` — server-only package boundary for Core Schema loading
-- `app/tests/e2e/viewer.spec.mjs` — real browser and HTTP integration
-- `.github/workflows/` — immutable CI, CodeQL, and release verification
+The browser/Next graph uses Core 0.23.0, Read 0.2.0, Web Client 0.4.1 and React 0.5.0 from `app/vendor/`. The private basic Host uses Host 0.3.1, its different Core 0.23.0 bytes, and Read 0.1.0 from `app/host/vendor/`. Their same Core version string does not imply the same artifact. Never replace either graph by version number or a peer override. The two processes exchange official HTTP bytes only.
 
-## Related projects
+`/api/demo-context` is private application coordination: it supplies a fresh transport association bound to the public selection, endpoint, caller session and request ID. Those browser-facing values prove no identity or authorization. The local startup owner generates a separate internal token for the Next-to-Host hop; the Host applies its independently configured local policy to the real Core inspection. The token is never sent to the browser.
 
-- [KDNA Core](https://github.com/aikdna/kdna)
-- [KDNA React](https://github.com/aikdna/kdna-react)
-- [KDNA Web Client](https://github.com/aikdna/kdna-web-client)
-- [KDNA Web Server](https://github.com/aikdna/kdna-web-server)
-- [Create KDNA Web App](https://github.com/aikdna/create-kdna-web-app)
-- [KDNA Assets](https://github.com/aikdna/kdna-assets)
-- [KDNA Activation Server](https://github.com/aikdna/kdna-activation-server)
-- [KDNA Remote Server](https://github.com/aikdna/kdna-remote-server)
+The default local operator policy allows the explicitly requested valid input. For reproducible negative checks, startup accepts `KDNA_DEMO_POLICY=deny` or `transport`, and `KDNA_DEMO_DELAY_MS` from 0 to 2000. These are server launch settings, not browser authority claims. This localhost demo is not a multi-user or internet deployment.
 
-This demo is the browser consumer for the **local full-load** contract
-(upload → LoadPlan → authorized Runtime Capsule). The complementary **remote
-projection** contract — where the asset stays on the deployer's server and only
-a task-scoped projection crosses the network, never the full payload — is
-demonstrated by the remote server's
-[licensed projection walkthrough](https://github.com/aikdna/kdna-remote-server/blob/main/docs/LICENSED_PROJECTION_WALKTHROUGH.md).
-Both paths can point at the same self-hosted activation server for entitlement.
+Read responses are bounded to 1 MiB and each Read is limited to 5 seconds. Multipart forwarding is bounded to 12 MiB and context coordination to 32 KiB. Server stream finish is not remote application acknowledgement. Remote identity, authorization, revocation and replay remain subject to the official ViewModel proof limits.
 
-
-## Official packages
-
-Official KDNA packages are published under the `@aikdna` npm scope and the
-`aikdna` name on PyPI. The unscoped npm package `kdna` is not affiliated with
-the KDNA project. Install only from the official coordinates shown in this
-README.
-
-## License
-
-Apache-2.0
+The integration candidate still requires independent acceptance before exact live landing. It does not establish public release, retained expansion, Reader product UI, native compatibility, formal asset production or Open Complete.
