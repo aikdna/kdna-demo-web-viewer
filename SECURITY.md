@@ -1,35 +1,13 @@
-# Security policy
+# Security boundary
 
-## Supported version
+This private reference demo runs only on 127.0.0.1. Do not expose it to a network or treat it as multi-user authentication. The local operator controls the Host policy; the default allows explicitly requested valid input. A browser transport context is an association, never authorization or a trusted identity.
 
-Security fixes are applied to the latest release on `main`.
+The startup owner generates a random internal token for the Next-to-Host hop and passes it only to the two owned processes. The Host checks this token and applies its local policy through the official Host/Core/Read graph. Browser headers and selection metadata cannot replace that trusted context. Browser/Next and basic Host use separate exact dependency graphs and communicate through official HTTP bytes.
 
-## Report a vulnerability
+Input is limited to 10 MiB, multipart forwarding to 12 MiB, private context coordination to 32 KiB, and response bytes to 1 MiB. Each Read has a 5-second limit. The proxy binds to the configured loopback Host, rejects redirects and foreign origins, preserves official response status/headers/body, and does not parse KDNA or replicate its validator. Only single-request Read is exposed; expansion and earlier activation/execution flows are unsupported.
 
-Please use GitHub's private vulnerability reporting for this repository. Do not
-open a public issue containing exploit details, credentials, protected asset
-content, or deployment configuration.
+The four public React APIs own selection and Read lifecycle. Replacement, Cancel, Release and unmount invalidate pending results. The public ViewModel renders text and bounded public codes; it does not grant local capabilities. No raw payload fallback or HTML execution path exists in the page. A completed response or server finish does not prove remote application processing.
 
-## Deployment guidance
+Install dependencies only from the two lockfiles and exact relative KDNA vendor tarballs. Keep install hooks disabled. The two Core 0.23.0 artifacts have different digests and must not be merged by version number. No global cache changes, browser downloads or publication are part of the local checks.
 
-This repository is a local reference demo, not a production deployment recipe.
-Before adapting it for a public service:
-
-- terminate TLS before credential-bearing KDNA requests;
-- add authentication, application authorization, rate limits, and audit policy;
-- use a private, writable server-side storage location with bounded retention;
-- keep encrypted payloads, passwords, license keys, and key material out of
-  browser responses and logs;
-- run the KDNA route in the Next.js Node.js runtime;
-- review the security model published by `@aikdna/kdna-web-server@0.3.0`.
-
-The application keeps a temporary exact PostCSS override in `package.json`
-because the pinned Next.js release otherwise resolves a version affected by a
-CSS serialization advisory. Keep the override until Next.js resolves an equal
-or newer safe version itself.
-
-The UI only renders the public projection returned by the current KDNA Web
-Client and Web Server contracts. Errors shown in the browser must stay within
-their bounded public shape. A user-selected file necessarily exists in the
-browser before upload; the server must not return protected container entries
-or credential material in its responses.
+Synthetic fixtures are disposable test assets. No formal assets or private production inputs are included. Historical CI/release and online audit checks remain outside this scoped implementation evidence. Independent review and any later deployment require their own authorization and threat model; this candidate is not a public release.
