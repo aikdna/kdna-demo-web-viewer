@@ -62,8 +62,11 @@ jobs:
           node-version: '22.23.1'
           check-latest: false
           cache: npm
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: |
+            app/package-lock.json
+            app/host/package-lock.json
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm --prefix host ci --ignore-scripts --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run build
       - name: Exercise browser inspect, LoadPlan, and Runtime load
