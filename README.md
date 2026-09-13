@@ -6,7 +6,7 @@ A private Next.js application for one explicit public Read at a time. Select a v
 
 ## Run locally
 
-Use Node.js 22 or newer. Framework versions remain Next 16.2.12, React 19.2.7 and ReactDOM 19.2.7. The app is private and has no publication workflow in this delivery.
+Use Node.js 22 or newer. Framework versions remain Next 16.3.5, React 19.2.7 and ReactDOM 19.2.7. The app is private and has no publication workflow in this delivery.
 
 From `app/`:
 
