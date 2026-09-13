@@ -13,7 +13,7 @@
     "test": "node scripts/check-basic.mjs && node --unhandled-rejections=strict --test tests/repository-contract.test.mjs tests/pd300-basic.test.mjs",
     "test:e2e": "playwright test",
     "audit:production": "npm audit --omit=dev --audit-level=moderate",
-    "public:check": "node scripts/check-public-surface.mjs",
+    "public:check": "node scripts/check-public-surface.mjs && node scripts/check-public-surface-hostile.mjs",
     "public:check:source": "node scripts/check-public-surface.mjs --allow-missing-lock",
     "release:context": "node scripts/verify-release-context.mjs",
     "ci": "npm run test && npm run public:check && npm run audit:production && npm run build && npm run test:e2e",
