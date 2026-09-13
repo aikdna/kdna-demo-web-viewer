@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { selectKDNA, releaseKDNASelection } from '@aikdna/kdna-web-client'
 import { coordinate, localUrl, trustedSecret, sameOrigin, applicationOrigin } from '../host/context.mjs'
-import { demoFixture } from './pd300-fixtures.mjs'
+import { demoFixture } from './fixtures.mjs'
 test('public selection and fresh context bind a valid synthetic 1.1 asset without a read',async()=>{
  const result=await selectKDNA(demoFixture());assert.equal(result.status,'selected')
  const data={selection:result.selection,sessionId:'demo:unit',judgmentId:'judgment:demo'}

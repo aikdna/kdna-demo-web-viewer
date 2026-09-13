@@ -10,7 +10,7 @@
     "dev": "node scripts/start-local.mjs --dev",
     "build": "next build --webpack",
     "start": "node scripts/start-local.mjs",
-    "test": "node scripts/check-basic.mjs && node --unhandled-rejections=strict --test tests/repository-contract.test.mjs tests/pd300-basic.test.mjs",
+    "test": "node scripts/check-basic.mjs && node --unhandled-rejections=strict --test tests/repository-contract.test.mjs tests/basic.test.mjs",
     "test:e2e": "playwright test",
     "audit:production": "npm audit --omit=dev --audit-level=moderate",
     "public:check": "node scripts/check-public-surface.mjs && node scripts/check-public-surface-hostile.mjs",
@@ -18,7 +18,7 @@
     "release:context": "node scripts/verify-release-context.mjs",
     "ci": "npm run test && npm run public:check && npm run audit:production && npm run build && npm run test:e2e",
     "check:basic": "node scripts/check-basic.mjs",
-    "fixtures": "node tests/pd300-fixtures.mjs"
+    "fixtures": "node tests/fixtures.mjs"
   },
   "dependencies": {
     "@aikdna/kdna-core": "file:vendor/aikdna-kdna-core-0.24.0-rc.component-semantics.2.tgz",

@@ -6,7 +6,7 @@ import { setTimeout as delay } from 'node:timers/promises'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { writeFixtures } from '../pd300-fixtures.mjs'
+import { writeFixtures } from '../fixtures.mjs'
 const app = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const output = path.resolve(process.env.KDNA_EVIDENCE_DIR ?? '.demo-test-results')
 const fixtureDir = path.join(output,'fixtures')
