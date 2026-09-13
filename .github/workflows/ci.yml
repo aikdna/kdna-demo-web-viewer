@@ -27,8 +27,11 @@ jobs:
           node-version: ${{ matrix.node }}
           check-latest: false
           cache: npm
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: |
+            app/package-lock.json
+            app/host/package-lock.json
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm --prefix host ci --ignore-scripts --no-audit --no-fund
       - run: npm test
       - run: npm run public:check
       - run: npm run audit:production
