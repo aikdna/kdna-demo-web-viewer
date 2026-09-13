@@ -171,6 +171,33 @@ const mutations = new Map([
         : readText(absolute)),
     }),
   }],
+  ['the README references the retired asset download host', {
+    expected: /README must not reference the retired asset download host/u,
+    mutate: () => candidate({
+      readText: (absolute) => (absolute === path.join(repoRoot, 'README.md')
+        ? `${readText(absolute)}\nSee the kdna-work-releases repository for the published reference asset.\n`
+        : readText(absolute)),
+    }),
+  }],
+  ['the page loses its explicit request-body serialization', {
+    expected: /the page must serialize its request body explicitly/u,
+    mutate: () => candidate({
+      readText: (absolute) => (absolute === path.join(appRoot, 'app', 'page.jsx')
+        ? readText(absolute).replace('body: JSON.stringify(', 'body: encodePayload(')
+        : readText(absolute)),
+    }),
+  }],
+  ['the page gains a second, unspecified serialization', {
+    expected: /the page must serialize exactly one value \(the request body\); found 2/u,
+    mutate: () => candidate({
+      readText: (absolute) => (absolute === path.join(appRoot, 'app', 'page.jsx')
+        ? readText(absolute).replace(
+          '{coordinating ? <p className="status" role="status">Preparing read…</p> : null}',
+          '{coordinating ? <p className="status" role="status">Preparing read…</p> : null}\n      <pre>{JSON.stringify(reader, null, 2)}</pre>',
+        )
+        : readText(absolute)),
+    }),
+  }],
 ])
 
 let rejected = 0

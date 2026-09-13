@@ -250,11 +250,25 @@ export function publicSurfaceErrors({
   check(!/\{\s*(?:unlock|content|inspect)\s*\|\|/.test(page), 'raw KDNA objects must not be rendered as React children')
   check(!page.includes('payload.kdnab'), 'the page must not reference raw payload entries')
   check(!page.includes('console.'), 'browser flow must not log public or protected response objects')
+  // The retired page rendered a Runtime object and had to serialize it explicitly. The
+  // current page renders the remote result only through the public view components, so the
+  // surviving invariant is that the sole serialization is the bounded request body: no
+  // unnamed second serialization may appear, and the request body may not lose its own.
+  const serializations = page.match(/JSON\.stringify\(/gu) ?? []
+  check(
+    serializations.length === 1,
+    `the page must serialize exactly one value (the request body); found ${serializations.length}`,
+  )
+  check(
+    /body:\s*JSON\.stringify\(/u.test(page),
+    'the page must serialize its request body explicitly',
+  )
 
   // 6. Public narrative: the current local-file contract, with no asset download.
   const readme = read('README.md')
   const contributing = read('CONTRIBUTING.md')
   check(!readme.includes('releases/download/'), 'README must not point at a downloadable asset')
+  check(!readme.includes('kdna-work-releases'), 'README must not reference the retired asset download host')
   check(!readme.includes('agent-project-context-v0.1.2'), 'removed historical asset URL must not return')
   check(readme.includes('Node.js 22 or newer'), 'README must declare the Node.js 22 floor that matches the package engine')
   check(readme.includes('Offline install boundary'), 'README must state the offline install boundary of the two graphs')
