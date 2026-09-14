@@ -1,4 +1,14 @@
-# Security boundary
+# Security policy
+
+## Supported version
+
+Security fixes are applied to the latest release on `main`.
+
+## Report a vulnerability
+
+Please use [GitHub's private vulnerability reporting](https://github.com/aikdna/kdna-demo-web-viewer/security/advisories/new) for this repository. Do not open a public issue containing exploit details, credentials, protected asset content, or deployment configuration.
+
+## Security boundary
 
 This local reference demo runs only on 127.0.0.1. Do not expose it to a network or treat it as multi-user authentication. The local operator controls the Host policy; the default allows explicitly requested valid input. A browser transport context is an association, never authorization or a trusted identity.
 
