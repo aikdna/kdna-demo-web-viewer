@@ -1,28 +1,11 @@
 import { defineConfig } from '@playwright/test'
-
-const port = Number(process.env.KDNA_DEMO_PORT ?? 3210)
-
+import path from 'node:path'
+const output = process.env.KDNA_EVIDENCE_DIR ?? '.demo-test-results'
 export default defineConfig({
-  testDir: './tests/e2e',
-  forbidOnly: Boolean(process.env.CI),
-  retries: process.env.CI ? 1 : 0,
-  workers: 1,
-  reporter: 'line',
-  globalTeardown: './tests/global-teardown.mjs',
-  use: {
-    baseURL: `http://127.0.0.1:${port}`,
-    browserName: 'chromium',
-    screenshot: 'only-on-failure',
-    trace: 'retain-on-failure',
-  },
-  webServer: {
-    command: `npm run start -- --hostname 127.0.0.1 --port ${port}`,
-    url: `http://127.0.0.1:${port}`,
-    reuseExistingServer: false,
-    timeout: 60_000,
-    env: {
-      ...process.env,
-      KDNA_STORAGE_DIR: '.kdna-test-storage',
-    },
-  },
+  testDir: './tests/e2e', workers: 1, retries: 0, fullyParallel: false, timeout: 45000,
+  expect: { timeout: 10000 }, forbidOnly: true, globalTeardown: './tests/global-teardown.mjs',
+  outputDir: path.join(output,'artifacts'), reporter: [['line'],['json',{ outputFile: path.join(output,'playwright-report.json') }]],
+  use: { screenshot: 'off', trace: 'off', video: 'off', viewport: { width: 1280, height: 900 } },
+  projects: [ { name: 'chrome', use: { browserName: 'chromium', channel: 'chrome' } },
+    { name: 'webkit', use: { browserName: 'webkit' } } ],
 })

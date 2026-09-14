@@ -24,3 +24,8 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+
+# Audit and delivery working notes: kept in the working tree,
+# never part of the public repository surface.
+docs/audits/

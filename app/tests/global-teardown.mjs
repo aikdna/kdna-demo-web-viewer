@@ -1,6 +1,12 @@
-import fs from 'node:fs/promises'
+import { readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
-
 export default async function globalTeardown() {
-  await fs.rm(path.resolve('.kdna-test-storage'), { recursive: true, force: true })
+  const directory = process.env.KDNA_EVIDENCE_DIR
+  if (!directory) return
+  const records = readdirSync(directory).filter(n => n.startsWith('resource-') && n.endsWith('.json'))
+  for (const name of records) {
+    const record = JSON.parse(readFileSync(path.join(directory,name),'utf8'))
+    if (!record.closed || record.ports.some(x => x.open)) throw new Error('DEMO_TEST_RESOURCE_NOT_CLOSED')
+  }
+  console.log('Recorded local app process groups closed: ' + records.length)
 }
