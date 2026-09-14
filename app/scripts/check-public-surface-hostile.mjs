@@ -200,6 +200,55 @@ const mutations = new Map([
   }],
 ])
 
+for (const [label, relative, entry] of [
+  ['CI', '.github/workflows/ci.yml', 'npm run test:e2e'],
+  ['release', '.github/workflows/release.yml', 'npm run ci'],
+]) {
+  const absolute = path.join(repoRoot, relative)
+  for (const [name, before, after, expected] of [
+    ['WebKit installation is removed', 'npx playwright install --with-deps chrome webkit', 'npx playwright install --with-deps chrome', /must install Chrome and WebKit/u],
+    ['Chrome installation is removed', 'npx playwright install --with-deps chrome webkit', 'npx playwright install --with-deps webkit', /must install Chrome and WebKit/u],
+    ['Host installation is removed', 'npm --prefix host ci --ignore-scripts --no-audit --no-fund', 'echo Host install omitted', /must install the loopback Host graph/u],
+    ['the browser entry is filtered to one project', `run: ${entry}`, `run: ${entry} -- --project=chrome`, /must run the complete/u],
+    ['the browser entry is replaced by a no-op', `run: ${entry}`, 'run: echo skipped', /must run the complete/u],
+  ]) {
+    mutations.set(`${label}: ${name}`, {
+      expected,
+      mutate: () => candidate({readText: filename => filename === absolute
+        ? readText(filename).replaceAll(before, after) : readText(filename)}),
+    })
+  }
+}
+for (const command of ['playwright test --project=chrome', 'playwright test --list', 'echo skipped']) {
+  mutations.set(`test:e2e is narrowed to ${command}`, {
+    expected: /test:e2e must execute the complete Playwright suite/u,
+    mutate: () => {
+      const state = candidate()
+      state.manifest.scripts['test:e2e'] = command
+      return state
+    },
+  })
+}
+mutations.set('the ci script drops its browser suite', {
+  expected: /ci must execute every source, public, audit, build and browser gate/u,
+  mutate: () => {
+    const state = candidate()
+    state.manifest.scripts.ci = state.manifest.scripts.ci.replace(' && npm run test:e2e', '')
+    return state
+  },
+})
+
+mutations.set('the README lists a different Core coordinate', {
+  expected: /README must document the current @aikdna\/kdna-core coordinate/u,
+  mutate: () => candidate({readText: absolute => absolute === path.join(repoRoot, 'README.md')
+    ? readText(absolute).replaceAll('0.24.0-rc.component-semantics.2', '0.24.0-rc.component-semantics.1') : readText(absolute)}),
+})
+mutations.set('CONTRIBUTING requires an unused external fixture', {
+  expected: /CONTRIBUTING must not require unused external fixture inputs/u,
+  mutate: () => candidate({readText: absolute => absolute === path.join(repoRoot, 'CONTRIBUTING.md')
+    ? `${readText(absolute)}\nSet KDNA_PROTECTED_DEMO_ASSET before testing.\n` : readText(absolute)}),
+})
+
 let rejected = 0
 for (const [name, mutation] of mutations) {
   const errors = publicSurfaceErrors(mutation.mutate())

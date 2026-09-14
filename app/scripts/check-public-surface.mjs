@@ -273,6 +273,10 @@ export function publicSurfaceErrors({
   check(readme.includes('Node.js 22 or newer'), 'README must declare the Node.js 22 floor that matches the package engine')
   check(readme.includes('Offline install boundary'), 'README must state the offline install boundary of the two graphs')
   check(contributing.includes('Node.js 22 or newer'), 'CONTRIBUTING must declare the Node.js 22 floor that matches the package engine')
+  for (const entry of VENDORED_ARCHIVES.filter(candidate => candidate.declared)) {
+    check(readme.includes(`| \`${entry.name}\` | \`${entry.version}\` |`), `README must document the current ${entry.name} coordinate ${entry.version}`)
+  }
+  check(!/KDNA_(?:PROTECTED_)?DEMO_ASSET/u.test(contributing), 'CONTRIBUTING must not require unused external fixture inputs')
 
   // 7. Licence, notice, workflows and immutable action references.
   const license = read('LICENSE')
@@ -300,12 +304,27 @@ export function publicSurfaceErrors({
   const dcoWorkflow = read('.github/workflows/dco.yml')
   const releaseWorkflow = read('.github/workflows/release.yml')
   check(routeUsesNodeRuntime(read('app/app/api/kdna/[...route]/route.js')), 'KDNA route must opt into the verified Node.js runtime')
-  for (const workflow of [ciWorkflow, releaseWorkflow]) {
-    check(workflow.includes('1e77e3e0d486c330fe9f9262b514ef24c859d469'), 'browser workflows must pin the exact Core fixture commit')
-    check(workflow.includes('fixtures/test_protected_entry.kdna'), 'browser workflows must install the protected Core fixture')
-    check(workflow.includes('KDNA_PROTECTED_DEMO_ASSET'), 'browser workflows must execute the protected fixture')
+  // Browser jobs must install both configured engines and the loopback Host,
+  // then run the complete suite. Old external asset variables had no consumer.
+  check(manifest.scripts?.['test:e2e'] === 'playwright test', 'test:e2e must execute the complete Playwright suite without project filters or list-only flags')
+  check(manifest.scripts?.ci === 'npm run test && npm run public:check && npm run audit:production && npm run build && npm run test:e2e', 'ci must execute every source, public, audit, build and browser gate')
+  for (const [label, workflow, job, entry] of [
+    ['CI', ciWorkflow, 'browser-integration', 'npm run test:e2e'],
+    ['release', releaseWorkflow, 'verify', 'npm run ci'],
+  ]) {
+    const header = `  ${job}:\n`
+    const start = workflow.indexOf(header)
+    const body = start < 0 ? '' : workflow.slice(start + header.length).split(/\n  [a-zA-Z0-9_-]+:\r?\n/u)[0]
+    const commands = [...body.matchAll(/^\s*(?:-\s+)?run:\s+([^\r\n]+)$/gmu)].map(match => match[1].trim())
+    const host = commands.indexOf('npm --prefix host ci --ignore-scripts --no-audit --no-fund')
+    const browsers = commands.indexOf('npx playwright install --with-deps chrome webkit')
+    const suite = commands.indexOf(entry)
+    check(host >= 0, `${label} browser job must install the loopback Host graph`)
+    check(browsers >= 0, `${label} browser job must install Chrome and WebKit with system dependencies`)
+    check(suite >= 0, `${label} browser job must run the complete ${entry} entry without filters`)
+    check(host >= 0 && browsers >= 0 && suite > host && suite > browsers, `${label} browser prerequisites must precede the complete suite`)
+    check(!/KDNA_(?:PROTECTED_)?DEMO_ASSET/u.test(body), `${label} browser job must not claim unused external fixture inputs`)
   }
-  check(ciWorkflow.includes('npm --prefix host ci'), 'CI must install the loopback Host graph before running the two-graph suite')
   check(releaseWorkflow.includes('refs/heads/main:refs/remotes/origin/main'), 'release workflow must fetch authoritative main exactly')
   check(dcoWorkflow.includes('name: DCO'), 'pull requests must expose the required DCO context')
   check(dcoWorkflow.includes('node app/scripts/check-dco.mjs'), 'DCO workflow must run the repository-owned verifier')

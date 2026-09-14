@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Demonstrate explicit public Read with local file selection, cancellation,
+  release, and bounded ViewModel rendering through the current vendored graph.
+- Install Chrome, WebKit, and the loopback Host dependencies before the complete
+  browser suite in CI and release verification.
+- Replace unused external fixture setup with checks for the actual synthetic
+  browser suite, retaining both browser projects and all behavioral scenarios.
+- Document the exact candidate dependency coordinates and reproducible local
+  setup without implying npm publication or native compatibility.
+
 ## 0.1.2 - 2026-08-08
 
 - Upgrade to the published 0.21.0 consumer chain: Core 0.21.0, Web Client
