@@ -42,7 +42,7 @@ npm run build
 KDNA_EVIDENCE_DIR="$(mktemp -d)" npm run test:e2e
 ```
 
-The fixture command generates local synthetic **asset version 1.1.0** files and validates the positive cases with public Core. Their container/payload/Read tuple remains the accepted public 0.2/0.1 contract; 1.1.0 is the test asset version, not a new protocol. Choose `basic-1.1.kdna` and the default `judgment:demo`. Replacement, long text, invalid and oversized fixtures support the local checks. These are test inputs, not formal KDNA assets or a conversion of older examples.
+The fixture command generates local synthetic **asset version 1.1.0** files and validates the positive cases with public Core. Those fixtures carry the accepted public coordinates of this repository's bound graph: Container/Payload 0.2, Core 0.3, Canonical IR 0.2 and Read 0.2. The asset's own 1.1.0 is a separate version coordinate, not a new protocol. Choose `basic-1.1.kdna` and the default `judgment:demo`. Replacement, long text, invalid and oversized fixtures support the local checks. These are test inputs, not formal KDNA assets or a conversion of older examples.
 
 Other files must be accepted by the current public Core graph, fit the 10 MiB input bound, and identify a judgment the caller explicitly selects. No legacy password, activation, upload/inspect/plan/load or execution flow is provided. Errors expose bounded public or application codes. The page never renders raw container payloads.
 
